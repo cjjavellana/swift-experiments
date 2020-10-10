@@ -93,11 +93,11 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
         // to OptionalComponentValidator
         //
         //              optional or mandatory component
-        //              -------------------------------
-        //              /                |             \
+        //                ----------------------------
+        //              /               |              \
         //         OpenBracket?  ComponentValidator  CloseBracket?
-        //                               |
-        //                    ValidatorComponentWeNeed
+        //                              |
+        //                 FixedLength, MaxLength, etc
         //
         if (p instanceof SWIFTFieldValidationParser.OptionalComponentValidatorContext) {
             SWIFTFieldValidationParser.OptionalComponentValidatorContext optionalCtx =
