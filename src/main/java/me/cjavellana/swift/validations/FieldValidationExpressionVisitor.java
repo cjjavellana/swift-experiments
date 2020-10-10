@@ -21,8 +21,10 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
     }
 
     /**
-     * A message field in a SWIFT MT message can contain multiple lines. This callback method is called if field validators
-     * span multiple lines. e.g. 82A
+     * Callback method called when the parser encounters a `LineEntry` context. At the very least, a field with validation
+     * requirement has 1 `LineEntry` validator which can be comprised of 1 or more Component Validators.
+     *
+     * This callback method is called multiple times if field validators span multiple lines. e.g. 82A
      * <p>
      * Examples:
      * <p>
