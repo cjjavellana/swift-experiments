@@ -114,6 +114,8 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
             return maxLengthValidator(componentValidator, isOptional);
         } else if (componentValidator instanceof SWIFTFieldValidationParser.FixedLengthContext) {
             return fixedLengthValidator(componentValidator, isOptional);
+        } else if (componentValidator instanceof SWIFTFieldValidationParser.RangeContext) {
+            return rangeValidator(componentValidator, isOptional);
         }
 
         return null;
@@ -153,5 +155,25 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
         validatorSettings.setSubFieldSeparator(subFieldSeparator);
 
         return MaxLengthValidator.of(validatorSettings);
+    }
+
+    private RangeValidator rangeValidator(ParseTree componentValidator, boolean isOptional) {
+        SWIFTFieldValidationParser.RangeContext ml =
+                (SWIFTFieldValidationParser.RangeContext) componentValidator;
+
+        String subFieldSeparator = (ml.SUBFIELD() != null) ? ml.SUBFIELD().getText() : null;
+        int minLength = Integer.parseInt(ml.min.getText());
+        int maxLength = Integer.parseInt(ml.max.getText());
+        String charSet = CharTypes.patternFor(ml.allowed_chars.getText());
+
+        ValidatorSettings validatorSettings = new ValidatorSettings();
+        validatorSettings.setSwiftFormat(ml.getText());
+        validatorSettings.setCharSet(charSet);
+        validatorSettings.setMinLength(minLength);
+        validatorSettings.setMaxLength(maxLength);
+        validatorSettings.setOptional(isOptional);
+        validatorSettings.setSubFieldSeparator(subFieldSeparator);
+
+        return RangeValidator.of(validatorSettings);
     }
 }
