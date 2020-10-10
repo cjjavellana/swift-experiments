@@ -1,0 +1,8 @@
+# All mandatory fields
+3!a15d
+
+# Field with optional subfields
+6a[/8!n][//4!n]
+
+# Sample multiline validation
+[/1!a][/34x]\r\n4!a2!a2!c[3c]
