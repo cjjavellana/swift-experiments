@@ -35,11 +35,11 @@ public class CharTypes {
             case "e":
                 return "\\s";
             case "x":
-                return "[A-Za-z0-9/–?:().,‘+(\\r\\n)\\s]";
+                return "[A-Za-z0-9/–?:().,‘+\\s(\\r\\n)]";
             case "y":
                 return "[A-Z0-9.,–()/=‘+:?!\"%&*<>;\\s]";
             case "z":
-                return "[A-Za-z0-9.,–()/='+:?!\"%&*<>;{@#_(\\r\\n)\\s]";
+                return "[A-Za-z0-9.,–()/='+:?!\"%&*<>;{@#_\\s(\\r\\n)]";
             default:
                 return swiftCharType;
         }

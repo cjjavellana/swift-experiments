@@ -6,6 +6,7 @@ import lombok.Data;
 public class ValidatorSettings {
     private String swiftFormat;
     private boolean isOptional = false;
+    private int maxRows;
     private int maxLength;
     private int fixedLength;
     private int minLength;

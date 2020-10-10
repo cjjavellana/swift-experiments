@@ -1,6 +1,5 @@
 # SWIFT Message Parser & Validator
 
-## Introduction
 
 ## Directory Structure
 

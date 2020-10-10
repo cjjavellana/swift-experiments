@@ -23,7 +23,7 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
     /**
      * Callback method called when the parser encounters a `LineEntry` context. At the very least, a field with validation
      * requirement has 1 `LineEntry` validator which can be comprised of 1 or more Component Validators.
-     *
+     * <p>
      * This callback method is called multiple times if field validators span multiple lines. e.g. 82A
      * <p>
      * Examples:
@@ -118,6 +118,8 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
             return fixedLengthValidator(componentValidator, isOptional);
         } else if (componentValidator instanceof SWIFTFieldValidationParser.RangeContext) {
             return rangeValidator(componentValidator, isOptional);
+        } else if (componentValidator instanceof SWIFTFieldValidationParser.RowByLengthContext) {
+            return rowByLengthValidator(componentValidator, isOptional);
         }
 
         return null;
@@ -157,6 +159,26 @@ public class FieldValidationExpressionVisitor extends SWIFTFieldValidationBaseVi
         validatorSettings.setSubFieldSeparator(subFieldSeparator);
 
         return MaxLengthValidator.of(validatorSettings);
+    }
+
+    private RowByLengthValidator rowByLengthValidator(ParseTree componentValidator, boolean isOptional) {
+        SWIFTFieldValidationParser.RowByLengthContext ml =
+                (SWIFTFieldValidationParser.RowByLengthContext) componentValidator;
+
+        String subFieldSeparator = (ml.SUBFIELD() != null) ? ml.SUBFIELD().getText() : null;
+        int maxRowCount = Integer.parseInt(ml.row.getText());
+        int maxLength = Integer.parseInt(ml.len.getText());
+        String charSet = CharTypes.patternFor(ml.allowed_chars.getText());
+
+        ValidatorSettings validatorSettings = new ValidatorSettings();
+        validatorSettings.setSwiftFormat(ml.getText());
+        validatorSettings.setCharSet(charSet);
+        validatorSettings.setMaxRows(maxRowCount);
+        validatorSettings.setMaxLength(maxLength);
+        validatorSettings.setOptional(isOptional);
+        validatorSettings.setSubFieldSeparator(subFieldSeparator);
+
+        return RowByLengthValidator.of(validatorSettings);
     }
 
     private RangeValidator rangeValidator(ParseTree componentValidator, boolean isOptional) {
